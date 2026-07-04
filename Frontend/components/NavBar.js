@@ -17,7 +17,7 @@ export default function NavBar() {
       <div className="container" style={styles.inner}>
         <Link href="/" style={styles.brand}>
           <LogoMark size={26} />
-          <span style={styles.brandText}>EV Naija</span>
+          <span style={styles.brandText}>234ev</span>
         </Link>
         <nav style={styles.nav}>
           {LINKS.map((link) => {

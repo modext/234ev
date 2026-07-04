@@ -1,4 +1,4 @@
-# EV Naija — Web App
+# 234ev — Web App
 
 Next.js web companion: same data as the mobile app (map, shops, tips, submissions),
 built for desktop/browser use and SEO discoverability.
@@ -12,7 +12,7 @@ npm install
 Create `.env.local`:
 
 ```
-NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
 ```
 
 (Once your backend is deployed to Railway, change this to your Railway URL or
@@ -24,8 +24,7 @@ Run it:
 npm run dev
 ```
 
-Visit `http://localhost:3001` (or whatever port it picks if 3000 is taken by
-your backend — run backend and web app side by side on different ports).
+Visit `http://localhost:3000` (backend runs on 3001).
 
 ## 2. Design notes
 

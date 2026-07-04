@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>EV Naija — Find charging spots, shops & tips</title>
+        <title>234ev — Find charging spots, shops & tips</title>
         <meta
           name="description"
           content="Find EV charging and battery-swap spots, trusted maintenance shops, and practical tips for EV owners in Nigeria."

@@ -16,11 +16,11 @@ npm run prisma:seed
 npm run dev
 ```
 
-API runs at `http://localhost:3000`. Test it:
+API runs at `http://localhost:3001` (frontend uses 3000). Test it:
 
 ```bash
-curl http://localhost:3000/health
-curl "http://localhost:3000/api/stations?lat=6.5244&lng=3.3792&radiusKm=50"
+curl http://localhost:3001/health
+curl "http://localhost:3001/api/stations?lat=6.5244&lng=3.3792&radiusKm=50"
 ```
 
 ## 2. Deploy to Railway
