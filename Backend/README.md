@@ -25,19 +25,12 @@ curl "http://localhost:3001/api/stations?lat=6.5244&lng=3.3792&radiusKm=50"
 
 ## 2. Deploy to Railway
 
-1. Push this folder to a GitHub repo.
-2. In Railway: **New Project → Deploy from GitHub repo**, select the repo.
-3. **Add a PostgreSQL plugin** to the project (Railway auto-injects `DATABASE_URL`
-   into your service's environment — you don't need to set it manually).
-4. In your service's **Settings → Deploy**, set the start command:
-   ```
-   npx prisma migrate deploy && npm start
-   ```
-   This runs migrations automatically on every deploy.
-5. Once deployed, run the seed script once via Railway's shell (or a one-off
-   `railway run npm run prisma:seed` if using the Railway CLI locally).
-6. Grab your Railway-generated URL (e.g. `xxx.up.railway.app`) or attach your
-   custom domain in **Settings → Networking → Custom Domain**.
+1. Repo is at `modext/234ev` — in Railway: **New Project → Deploy from GitHub repo**.
+2. Set **Root Directory** to `Backend` in service Settings.
+3. **Add a PostgreSQL plugin** to the project (Railway auto-injects `DATABASE_URL`).
+4. `railway.toml` sets the start command to run migrations then start the server.
+5. After first deploy, run the seed once via Railway shell: `npm run prisma:seed`
+6. Grab your Railway URL in **Settings → Networking**.
 
 ## 3. API reference (v0)
 
