@@ -1,0 +1,69 @@
+# 234ev — Backend API
+
+Express + Prisma + PostgreSQL API serving charging stations, maintenance shops,
+tips, and crowdsourced submissions.
+
+## 1. Local setup
+
+```bash
+npm install
+cp .env.example .env
+# Edit .env with a local Postgres connection string, e.g.:
+# postgresql://postgres:postgres@localhost:5432/234ev?schema=public
+
+npx prisma migrate dev --name init
+npm run prisma:seed
+npm run dev
+```
+
+API runs at `http://localhost:3000`. Test it:
+
+```bash
+curl http://localhost:3000/health
+curl "http://localhost:3000/api/stations?lat=6.5244&lng=3.3792&radiusKm=50"
+```
+
+## 2. Deploy to Railway
+
+1. Push this folder to a GitHub repo.
+2. In Railway: **New Project → Deploy from GitHub repo**, select the repo.
+3. **Add a PostgreSQL plugin** to the project (Railway auto-injects `DATABASE_URL`
+   into your service's environment — you don't need to set it manually).
+4. In your service's **Settings → Deploy**, set the start command:
+   ```
+   npx prisma migrate deploy && npm start
+   ```
+   This runs migrations automatically on every deploy.
+5. Once deployed, run the seed script once via Railway's shell (or a one-off
+   `railway run npm run prisma:seed` if using the Railway CLI locally).
+6. Grab your Railway-generated URL (e.g. `xxx.up.railway.app`) or attach your
+   custom domain in **Settings → Networking → Custom Domain**.
+
+## 3. API reference (v0)
+
+| Method | Path | Purpose |
+|---|---|---|
+| GET | `/api/stations?lat=&lng=&radiusKm=&city=&type=` | List/search stations |
+| GET | `/api/stations/:id` | Station detail + recent reports |
+| POST | `/api/stations/:id/report` | `{ working: bool, note? }` — quick status ping |
+| GET | `/api/shops?lat=&lng=&radiusKm=&city=` | List/search shops |
+| GET | `/api/shops/:id` | Shop detail + reviews |
+| POST | `/api/shops/:id/reviews` | `{ rating, comment?, authorName? }` |
+| GET | `/api/tips?category=` | List tips |
+| POST | `/api/submissions` | Crowdsource a new station/shop/correction |
+| GET | `/api/submissions?status=` | List submissions (build an admin screen around this) |
+| POST | `/api/submissions/:id/approve` | Promote a submission into the live tables |
+
+**Important before real launch:** the approve/reject submission endpoints have
+no auth on them yet — that's fine for local testing, but lock them down (simple
+API key or admin login) before deploying publicly, or anyone could approve junk data.
+
+## 4. What to build next (in priority order)
+
+1. Lock down `/api/submissions/:id/approve` and `/reject` behind admin auth.
+2. Add image upload for stations/shops (Railway + S3-compatible storage like
+   Cloudflare R2, or start simple with just a URL field).
+3. Add a lightweight admin web page (even a simple HTML page hitting the
+   submissions API) so you're not approving entries via curl.
+4. Swap the Haversine-based "nearby" queries for PostGIS once your dataset
+   grows past a few hundred rows — not needed yet at MVP scale.

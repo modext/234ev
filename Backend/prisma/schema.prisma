@@ -1,0 +1,130 @@
+// 234ev — core data schema
+// Keeping lat/lng as plain Float for MVP (Haversine distance in queries).
+// Can upgrade to PostGIS geography type later without breaking the API shape.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StationType {
+  PLUG_IN_AC
+  PLUG_IN_DC_FAST
+  BATTERY_SWAP
+  HOME_SOLAR_HUB // community-shared home charging point
+}
+
+enum StationStatus {
+  OPERATIONAL
+  UNKNOWN
+  DOWN
+  REMOVED
+}
+
+enum SubmissionType {
+  NEW_STATION
+  NEW_SHOP
+  STATUS_UPDATE
+  CORRECTION
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Station {
+  id            String        @id @default(cuid())
+  name          String
+  type          StationType
+  status        StationStatus @default(UNKNOWN)
+  operator      String? // e.g. "Spiro", "SAGLEV", "NNPC", or null for independent
+  latitude      Float
+  longitude     Float
+  address       String?
+  city          String
+  state         String
+  connectorType String? // e.g. "CCS2", "Type 2", "Swap-standard"
+  costNote      String? // free text: "₦200/kWh", "free for members", etc.
+  operatingHours String?
+  verified      Boolean       @default(false)
+  lastVerifiedAt DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  reports       StatusReport[]
+
+  @@index([city])
+  @@index([latitude, longitude])
+}
+
+model Shop {
+  id            String   @id @default(cuid())
+  name          String
+  specialty     String[] // e.g. ["battery", "motor", "general EV diagnostics"]
+  phone         String?
+  whatsapp      String?
+  latitude      Float
+  longitude     Float
+  address       String?
+  city          String
+  state         String
+  verified      Boolean  @default(false)
+  avgRating     Float?   @default(0)
+  ratingCount   Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  reviews       Review[]
+
+  @@index([city])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  shop      Shop     @relation(fields: [shopId], references: [id])
+  shopId    String
+  rating    Int // 1-5
+  comment   String?
+  authorName String? // no auth system yet in MVP — optional display name
+  createdAt DateTime @default(now())
+
+  @@index([shopId])
+}
+
+model Tip {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  category  String // "cost-saving", "route-planning", "maintenance", "solar-setup"
+  createdAt DateTime @default(now())
+}
+
+// Lightweight crowdsourcing: anything a user submits goes here first,
+// gets reviewed manually (or auto-approved later), then promoted into
+// Station/Shop tables.
+model Submission {
+  id          String           @id @default(cuid())
+  type        SubmissionType
+  status      SubmissionStatus @default(PENDING)
+  payload     Json // raw form data — flexible shape per submission type
+  targetId    String? // if this is an update to an existing Station/Shop
+  contactInfo String? // optional way to reach submitter for follow-up
+  createdAt   DateTime         @default(now())
+  reviewedAt  DateTime?
+}
+
+// Quick "still there / not working" pings on a station, cheaper than a full submission
+model StatusReport {
+  id        String   @id @default(cuid())
+  station   Station  @relation(fields: [stationId], references: [id])
+  stationId String
+  working   Boolean
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@index([stationId])
+}
