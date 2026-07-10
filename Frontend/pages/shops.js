@@ -30,7 +30,7 @@ export default function Shops() {
   return (
     <div className="container" style={styles.page}>
       <span style={styles.eyebrow}>DIRECTORY</span>
-      <h1 style={styles.heading}>Maintenance shops that know EVs</h1>
+      <h1 style={styles.heading}>Maintenance Shops</h1>
       <p style={styles.subheading}>
         Generic mechanics can miss EV-specific issues. These are shops other owners vouch for.
       </p>

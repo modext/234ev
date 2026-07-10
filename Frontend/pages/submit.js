@@ -117,7 +117,7 @@ const styles = {
     fontSize: 14,
   },
   form: { padding: 28, maxWidth: 480, display: "flex", flexDirection: "column", gap: 16 },
-  typeRow: { display: "flex", gap: 10, marginBottom: 4 },
+  typeRow: { display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 4 },
   typeButton: {
     flex: 1,
     border: "1px solid var(--color-primary)",

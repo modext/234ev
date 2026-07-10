@@ -72,6 +72,153 @@ button {
   padding: 0 20px;
 }
 
+/* ── Navigation ── */
+.navbar-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 22;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar-link {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.navbar-backdrop {
+  display: none;
+}
+
+/* ── Hero & page sections ── */
+.hero-section {
+  padding: 48px 0 32px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.legend-row {
+  flex-wrap: wrap;
+}
+
+/* ── Tablet ── */
+@media (max-width: 1024px) {
+  .navbar-nav {
+    gap: 14px;
+  }
+
+  .navbar-link {
+    font-size: 13px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .navbar-toggle {
+    display: flex;
+  }
+
+  .navbar-nav {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 12px 16px 24px;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    overflow-y: auto;
+    transform: translateY(-8px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.2s ease, opacity 0.2s ease, visibility 0.2s ease;
+    z-index: 21;
+  }
+
+  .navbar-nav--open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .navbar-link {
+    display: block;
+    padding: 14px 4px;
+    font-size: 16px;
+    border-bottom: 1px solid var(--color-border);
+    white-space: normal;
+  }
+
+  .navbar-link--active {
+    background: #f0f7f3;
+    margin: 0 -4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 6px;
+    border-bottom-color: transparent;
+  }
+
+  .navbar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 64px 0 0 0;
+    background: rgba(20, 32, 26, 0.35);
+    border: none;
+    cursor: pointer;
+    z-index: 20;
+  }
+
+  .hero-section {
+    padding: 32px 0 24px;
+  }
+
+  .contact-form-card,
+  .download-form-card {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .hero-actions a {
+    text-align: center;
+  }
+}
+
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
